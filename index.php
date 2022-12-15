@@ -7,7 +7,7 @@
         <div id="mycanvas">
 
             <div>
-                <h4 v-if="snmpid == 'NA'">No Online SNMP ID Not Found For This PPPoE ID!</h4>
+                <h4 v-if="snmpid == 'NA'">No Online SNMP ID Found For This PPPoE ID!</h4>
             </div>
 
             <div>
@@ -100,9 +100,9 @@
                         if(this.tx1 == '' && this.rx1 == ''){
                             this.tx1 = this.tx2;
                             this.rx1 = this.rx2;
-                            reutrn;
+                            return 0;
                         }
-                        if(this.tx2 !== '' && this.rx2 !== '' && this.tx2 !== 'NA' && this.rx2 !== 'NA'){
+                        else if(this.tx2 !== '' && this.rx2 !== '' && this.tx2 !== 'NA' && this.rx2 !== 'NA'){
                             this.txmbps = ((((this.tx2 - this.tx1)*8)/1024)/1024).toFixed(1);
                             this.rxmbps = ((((this.rx2 - this.rx1)*8)/1024)/1024).toFixed(1);
                             this.txkbps = (((this.tx2 - this.tx1)*8)/1024).toFixed(1);
@@ -116,21 +116,28 @@
                         }
                     }
                 },
-
-                generateGraph(){
-                    this.tx = '';
-                    this.rx = '';
-                    this.tx1 = '';
-                    this.rx1 = '';
-                    this.getSnmpID();
-                },
-
+                
                 getSnmpID(){
+                    this.reinitiateValues();
                     if(this.nasip !== '' && this.snmpcomstring !== '' && this.pppoeid !== ''){
                         axios
                         .get('mikrotiksnmpid.shellapi.php?nasip='+this.nasip+'&snmpcomstring='+this.snmpcomstring+'&pppoeid='+this.pppoeid)
                         .then(response => (this.snmpid = response.data));
                     }
+                },
+
+                reinitiateValues(){
+                    this.snmpid = '';
+                    this.tx = 0;
+                    this.rx = 0;
+                    this.tx1 = '';
+                    this.rx1 = '';
+                    this.txmbps = 0;
+                    this.rxmbps = 0;
+                    this.txkbps = 0;
+                    this.rxkbps = 0;
+                    this.txbps = 0;
+                    this.rxbps = 0;
                 },
 
                 
