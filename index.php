@@ -118,6 +118,10 @@
                 },
 
                 generateGraph(){
+                    this.tx = '';
+                    this.rx = '';
+                    this.tx1 = '';
+                    this.rx1 = '';
                     this.getSnmpID();
                 },
 
